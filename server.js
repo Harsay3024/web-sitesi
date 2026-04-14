@@ -92,6 +92,10 @@ app.get('/api/tiles/:layer/:z/:x/:y', async (req, res) => {
     }
 });
 
-app.listen(PORT, () => {
-    console.log(`Sunucu http://localhost:${PORT} adresinde çalışıyor`);
-});
+export default app;
+
+if (!process.env.VERCEL) {
+    app.listen(PORT, () => {
+        console.log(`Sunucu http://localhost:${PORT} adresinde çalışıyor`);
+    });
+}
