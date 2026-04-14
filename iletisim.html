@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#3b82f6">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="/favicon.png" type="image/png">
+    <meta name="description" content="ATMOS iletişim sayfası. Görüş, öneri ve destek talepleriniz için bizimle iletişime geçin.">
+    <meta property="og:title" content="İletişim - ATMOS">
+    <meta property="og:description" content="Hava durumu uygulamamızla ilgili her türlü soru, görüş ve öneriniz için bize ulaşın.">
+    <meta property="og:image" content="https://openweathermap.org/img/wn/01d@4x.png">
+    <meta property="og:type" content="website">
+    <title>ATMOS - Akıllı Hava Durumu | İletişim</title>
+    
+    <!-- Dış kaynaklar için DNS önceden çözümleme (Erken Yükleme) -->
+    <link rel="preconnect" href="https://openweathermap.org">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header class="main-header">
+        <div class="top-bar">
+            <div class="top-bar-left">
+                <div class="atmos-brand">
+                    <svg class="atmos-icon" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="atmosGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#93c5fd;stop-opacity:0.9" />
+                            </linearGradient>
+                        </defs>
+                        <!-- Ana A harfi yapısı (Ana çizgi) -->
+                        <path d="M 20 5 L 10 30 L 16 30 L 18 24 L 22 24 L 24 30 L 30 30 L 20 5" 
+                              fill="none" stroke="url(#atmosGradient)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" opacity="1" />
+                        <!-- A'nın iç çivisi (crossbar) -->
+                        <line x1="16.5" y1="20" x2="23.5" y2="20" stroke="url(#atmosGradient)" stroke-width="1.2" opacity="0.8" stroke-linecap="round" />
+                        <!-- Hava akımı katmanları (sol taraf) -->
+                        <path d="M 8 16 Q 14 14 20 16" fill="none" stroke="url(#atmosGradient)" stroke-width="0.9" opacity="0.6" stroke-linecap="round" />
+                        <path d="M 6 22 Q 12 20 18 22" fill="none" stroke="url(#atmosGradient)" stroke-width="0.7" opacity="0.4" stroke-linecap="round" />
+                        <!-- Hava akımı katmanları (sağ taraf) -->
+                        <path d="M 32 16 Q 26 14 20 16" fill="none" stroke="url(#atmosGradient)" stroke-width="0.9" opacity="0.6" stroke-linecap="round" />
+                        <path d="M 34 22 Q 28 20 22 22" fill="none" stroke="url(#atmosGradient)" stroke-width="0.7" opacity="0.4" stroke-linecap="round" />
+                    </svg>
+                    <span class="atmos-text">ATMOS</span>
+                </div>
+                <div id="header-weather-info" class="header-weather-info hidden"></div>
+            </div>
+            <div class="top-bar-right">
+                <div class="header-search-box">
+                    <input type="text" id="headerCityInput" placeholder="Arama..." list="turkey-cities" autocomplete="off">
+                    <datalist id="turkey-cities">
+                        <option value="Adana"></option>
+                        <option value="Ankara"></option>
+                        <option value="Antalya"></option>
+                        <option value="Bursa"></option>
+                        <option value="Diyarbakır"></option>
+                        <option value="Erzurum"></option>
+                        <option value="Eskişehir"></option>
+                        <option value="Gaziantep"></option>
+                        <option value="İstanbul"></option>
+                        <option value="İzmir"></option>
+                        <option value="Kayseri"></option>
+                        <option value="Konya"></option>
+                        <option value="Mersin"></option>
+                        <option value="Trabzon"></option>
+                        <option value="Şanlıurfa"></option>
+                    </datalist>
+                    <button id="locationBtn" title="Konumumu Bul"><i class="fa-solid fa-location-crosshairs"></i></button>
+                    <button id="headerSearchBtn" title="Ara"><i class="fa-solid fa-magnifying-glass"></i></button>
+                </div>
+                <div class="hamburger-menu">
+                    <i class="fa-solid fa-bars"></i>
+                </div>
+            </div>
+        </div>
+        <nav class="sub-nav">
+            <a href="/" class="sub-nav-link" data-i18n="home">ANA SAYFA</a>
+            <a href="/hakkimizda" class="sub-nav-link" data-i18n="about">HAKKIMIZDA</a>
+            <a href="/iletisim" class="sub-nav-link active" data-i18n="contact">İLETİŞİM</a>
+        </nav>
+    </header>
+    <section class="info-section" style="margin-top: 40px; background: transparent;">
+        <div class="info-container">
+            <h2 class="page-title" data-i18n="contact">İletişim</h2>
+            
+            <div class="contact-wrapper">
+                <div class="contact-info">
+                    <p style="margin-bottom: 25px;" data-i18n="contactDesc">Görüş, öneri ve destek talepleriniz için aşağıdaki bilgilerden veya yandaki form aracılığıyla bizimle iletişime geçebilirsiniz.</p>
+                    
+                    <div class="contact-item">
+                        <i class="fa-solid fa-envelope"></i>
+                        <a href="mailto:atmosweather@gmail.com" style="color: inherit; text-decoration: none;">atmosweather@gmail.com</a>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fa-solid fa-phone"></i>
+                        <span>+90 553 681 8005</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fa-solid fa-location-dot"></i>
+                        <span>Remote HQ - Konya, Türkiye</span>
+                    </div>
+                </div>
+
+                <div class="contact-form-container">
+                    <form id="contactForm" class="contact-form">
+                        <div class="form-group">
+                            <input type="text" name="from_name" placeholder="Adınız Soyadınız" data-i18n="namePlaceholder" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="email" name="reply_to" placeholder="E-posta Adresiniz" data-i18n="emailPlaceholder" required>
+                        </div>
+                        <div class="form-group">
+                            <textarea rows="4" name="message" placeholder="Mesajınız..." data-i18n="messagePlaceholder" required></textarea>
+                        </div>
+                        <button type="submit" class="submit-btn" data-i18n="sendBtn">Gönder</button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="map-container">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3015.656209590513!2d29.32431441541019!3d40.90135897931327!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14cadad99388df69%3A0x6b63ea9e43673db!2sTeknopark%20%C4%B0stanbul!5e0!3m2!1str!2str" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+        </div>
+    </section>
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="brand-footer-logo">
+                <svg class="brand-logo-icon" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="footerAtmosGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#93c5fd;stop-opacity:0.9" />
+                        </linearGradient>
+                    </defs>
+                    <path d="M 20 5 L 10 30 L 16 30 L 18 24 L 22 24 L 24 30 L 30 30 L 20 5" 
+                          fill="none" stroke="url(#footerAtmosGradient)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" opacity="1" />
+                    <line x1="16.5" y1="20" x2="23.5" y2="20" stroke="url(#footerAtmosGradient)" stroke-width="1.2" opacity="0.8" stroke-linecap="round" />
+                    <path d="M 8 16 Q 14 14 20 16" fill="none" stroke="url(#footerAtmosGradient)" stroke-width="0.9" opacity="0.6" stroke-linecap="round" />
+                    <path d="M 6 22 Q 12 20 18 22" fill="none" stroke="url(#footerAtmosGradient)" stroke-width="0.7" opacity="0.4" stroke-linecap="round" />
+                    <path d="M 32 16 Q 26 14 20 16" fill="none" stroke="url(#footerAtmosGradient)" stroke-width="0.9" opacity="0.6" stroke-linecap="round" />
+                    <path d="M 34 22 Q 28 20 22 22" fill="none" stroke="url(#footerAtmosGradient)" stroke-width="0.7" opacity="0.4" stroke-linecap="round" />
+                </svg>
+                <span class="brand-footer-text">ATMOS</span>
+            </div>
+            <div class="footer-links">
+                <a href="/hakkimizda" data-i18n="about">Hakkımızda</a>
+                <a href="/iletisim" data-i18n="contact">İletişim</a>
+                <a href="#" data-i18n="terms">Kullanım Koşulları</a>
+                <a href="#" data-i18n="privacy">Gizlilik Politikası</a>
+            </div>
+            <div class="footer-social">
+                <a href="#"><i class="fa-brands fa-twitter"></i></a>
+                <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                <a href="#"><i class="fa-brands fa-linkedin"></i></a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2026 ATMOS. <span data-i18n="allRights">Tüm hakları saklıdır.</span>
+            <span style="font-size: 0.85rem; opacity: 0.7; margin-top: 10px; display: block;" data-i18n="providedBy">Veriler <strong>OpenWeatherMap</strong> tarafından sağlanmaktadır.</span>
+        </div>
+    </footer>
+
+    <!-- Hamburger Menü Yan Panel (Side Drawer) -->
+    <div class="drawer-overlay" id="drawerOverlay"></div>
+    <div class="side-drawer" id="sideDrawer">
+        <div class="drawer-header">
+            <div class="logo"><span class="logo-icon">🌤️</span> ATMOS</div>
+            <button id="closeDrawerBtn" class="close-btn"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="drawer-content">
+            <a href="/"><i class="fa-solid fa-house"></i> <span data-i18n="home">Ana Sayfa</span></a>
+            <a href="/hakkimizda"><i class="fa-solid fa-circle-info"></i> <span data-i18n="about">Hakkımızda</span></a>
+            <a href="/iletisim"><i class="fa-solid fa-envelope"></i> <span data-i18n="contact">İletişim</span></a>
+            <a href="#"><i class="fa-solid fa-shield-halved"></i> <span data-i18n="privacy">Gizlilik Politikası</span></a>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script type="text/javascript">
+        (function() {
+            emailjs.init("hsjL7p6dHPF5X5SfU");
+        })();
+    </script>
+    <script src="script.js" defer></script>
+</body>
+</html>

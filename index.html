@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#3b82f6">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="/favicon.png" type="image/png">
+    <meta name="description" content="Gökyüzü Rehberi ile anlık, saatlik ve 5 günlük hava durumu tahminlerini, hava kalitesi (AQI) ve radar haritasını canlı takip edin.">
+    <meta name="keywords" content="hava durumu, güncel hava, radar, hava kalitesi, meteoroloji, saatlik tahmin">
+    <meta property="og:title" content="Gökyüzü Rehberi - Profesyonel Hava Durumu">
+    <meta property="og:description" content="Dünyanın her yeri için anlık, saatlik ve 5 günlük hava durumu tahmini ile interaktif radar haritası.">
+    <meta property="og:image" content="https://openweathermap.org/img/wn/01d@4x.png">
+    <meta property="og:type" content="website">
+    <title>ATMOS - Akıllı Hava Durumu</title>
+    
+    <!-- Dış kaynaklar için DNS önceden çözümleme (Erken Yükleme) -->
+    <link rel="preconnect" href="https://openweathermap.org">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://unpkg.com">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header class="main-header">
+        <div class="top-bar">
+            <div class="top-bar-left">
+                <div class="atmos-brand">
+                    <svg class="atmos-icon" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="atmosGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#93c5fd;stop-opacity:0.9" />
+                            </linearGradient>
+                        </defs>
+                        <!-- Ana A harfi yapısı (Ana çizgi) -->
+                        <path d="M 20 5 L 10 30 L 16 30 L 18 24 L 22 24 L 24 30 L 30 30 L 20 5" 
+                              fill="none" stroke="url(#atmosGradient)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" opacity="1" />
+                        <!-- A'nın iç çivisi (crossbar) -->
+                        <line x1="16.5" y1="20" x2="23.5" y2="20" stroke="url(#atmosGradient)" stroke-width="1.2" opacity="0.8" stroke-linecap="round" />
+                        <!-- Hava akımı katmanları (sol taraf) -->
+                        <path d="M 8 16 Q 14 14 20 16" fill="none" stroke="url(#atmosGradient)" stroke-width="0.9" opacity="0.6" stroke-linecap="round" />
+                        <path d="M 6 22 Q 12 20 18 22" fill="none" stroke="url(#atmosGradient)" stroke-width="0.7" opacity="0.4" stroke-linecap="round" />
+                        <!-- Hava akımı katmanları (sağ taraf) -->
+                        <path d="M 32 16 Q 26 14 20 16" fill="none" stroke="url(#atmosGradient)" stroke-width="0.9" opacity="0.6" stroke-linecap="round" />
+                        <path d="M 34 22 Q 28 20 22 22" fill="none" stroke="url(#atmosGradient)" stroke-width="0.7" opacity="0.4" stroke-linecap="round" />
+                    </svg>
+                    <span class="atmos-text">ATMOS</span>
+                </div>
+                <div id="header-weather-info" class="header-weather-info hidden">
+                    <!-- JS burayı dolduracak -->
+                </div>
+            </div>
+            <div class="top-bar-right">
+                <div class="header-search-box">
+                    <input type="text" id="headerCityInput" placeholder="Arama..." autocomplete="off">
+                    <button id="locationBtn" title="Konumumu Bul"><i class="fa-solid fa-location-crosshairs"></i></button>
+                    <button id="headerSearchBtn" title="Ara"><i class="fa-solid fa-magnifying-glass"></i></button>
+                    <button id="themeToggleBtn" title="Karanlık/Aydınlık Mod"><i class="fa-solid fa-moon"></i></button>
+                </div>
+                <div class="hamburger-menu">
+                    <i class="fa-solid fa-bars"></i>
+                </div>
+            </div>
+        </div>
+        <nav class="sub-nav">
+            <a href="javascript:void(0)" class="sub-nav-link" data-target="weatherResult" data-i18n="today">BUGÜN</a>
+            <a href="javascript:void(0)" class="sub-nav-link" data-target="forecastResult" data-i18n="hourly">SAAT BAŞI</a>
+            <a href="javascript:void(0)" class="sub-nav-link" data-target="chartContainer" data-i18n="daily">5 GÜNLÜK</a>
+            <a href="javascript:void(0)" class="sub-nav-link" data-target="aqiSection" data-i18n="aqi">HAVA KALİTESİ</a>
+            <a href="javascript:void(0)" class="sub-nav-link" data-target="aboutSection" data-i18n="about">HAKKIMIZDA</a>
+            <a href="javascript:void(0)" class="sub-nav-link" data-target="contactSection" data-i18n="contact">İLETİŞİM</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div id="weatherResult" class="weather-result tab-section active-tab">
+            <div class="leaflet-map-wrapper" style="margin-bottom: 30px; margin-top: 10px;">
+                <div id="weatherMap"></div>
+            </div>
+            <div id="weatherResultContent">
+                <!-- Sonuçlar buraya gelecek -->
+            </div>
+        </div>
+        <div id="forecastResult" class="forecast-result tab-section hidden">
+            <h3 data-i18n="hourlyTitle">Saatlik Tahmin</h3>
+            <div class="forecast-container" id="forecastContainer"></div>
+            <!-- Astronomi Kartı (Güneş ve Ay Döngüsü) -->
+            <div id="astronomyContainer" class="astronomy-container"></div>
+        </div>
+        <div id="chartContainer" class="chart-container tab-section hidden">
+            <h3 data-i18n="dailyTitle">5 Günlük Hava Tahmini</h3>
+            <div class="forecast-split-layout">
+                <div class="forecast-left-col">
+                    <div id="dailyForecastList" class="daily-forecast-list"></div>
+                </div>
+               <div class="forecast-right-col">
+    <div class="chart-wrapper">
+        <h4 id="tempTrendTitle" data-i18n="tempTrend">Sıcaklık Eğilimi (°C)</h4>
+        <canvas id="tempChart"></canvas>
+    </div>
+</div>
+
+            </div>
+        </div>
+        
+        <div id="aqiSection" class="aqi-section tab-section hidden">
+            <h3 data-i18n="aqiTitle">Hava Kalitesi İndeksi (AQI)</h3>
+            <div id="aqiContent" class="aqi-content"></div>
+        </div>
+        
+        <div id="aboutSection" class="info-section tab-section hidden">
+            <div class="info-container">
+                <h2 class="page-title" data-i18n="about">Hakkımızda</h2>
+                <p data-i18n="aboutDesc1">Gökyüzü Rehberi, en güncel ve doğru hava durumu verilerini modern bir arayüzle sunan profesyonel bir portaldır. Amacımız günlük planlarınızı en iyi şekilde yapmanıza yardımcı olmaktır.</p>
+                
+                <h3 class="sub-heading" data-i18n="features">Özelliklerimiz</h3>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <i class="fa-solid fa-bolt feature-icon"></i>
+                        <h4 data-i18n="fastDataTitle">Hızlı Veri</h4>
+                        <p data-i18n="fastDataDesc">Anlık güncellenen API altyapımızla verileri anında öğrenin.</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fa-solid fa-bullseye feature-icon"></i>
+                        <h4 data-i18n="highAccTitle">Yüksek Doğruluk</h4>
+                        <p data-i18n="highAccDesc">En güvenilir meteorolojik kaynaklardan kesin tahminler alın.</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fa-solid fa-mobile-screen feature-icon"></i>
+                        <h4 data-i18n="userFriendlyTitle">Kullanıcı Dostu</h4>
+                        <p data-i18n="userFriendlyDesc">Her cihazda kusursuz çalışan şık ve sade tasarımın keyfini çıkarın.</p>
+                    </div>
+                </div>
+
+                <h3 class="sub-heading" data-i18n="vision">Vizyonumuz</h3>
+                <p data-i18n="visionDesc">Amacımız, karmaşık hava durumu verilerini herkesin kolayca anlayabileceği, modern ve erişilebilir bir platformda sunarak günlük hayatınızı planlamanızı kolaylaştırmaktır.</p>
+            </div>
+        </div>
+
+        <div id="contactSection" class="info-section tab-section hidden">
+            <div class="info-container">
+                <h2 class="page-title" data-i18n="contact">İletişim</h2>
+                
+                <div class="contact-wrapper">
+                    <div class="contact-info">
+                        <p style="margin-bottom: 25px;" data-i18n="contactDesc">Görüş, öneri ve destek talepleriniz için aşağıdaki bilgilerden veya yandaki form aracılığıyla bizimle iletişime geçebilirsiniz.</p>
+                        
+                        <div class="contact-item">
+                            <i class="fa-solid fa-envelope"></i>
+                            <a href="mailto:atmosweather@gmail.com" style="color: inherit; text-decoration: none;">atmosweather.app@gmail.com</a>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fa-solid fa-phone"></i>
+                            <span>+90 553 681 8005</span>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fa-solid fa-location-dot"></i>
+                            <span>Remote HQ - Konya, Türkiye</span>
+                        </div>
+                    </div>
+
+                    <div class="contact-form-container">
+                    <form id="contactForm" class="contact-form">
+                            <div class="form-group">
+                            <input type="text" name="from_name" placeholder="Adınız Soyadınız" data-i18n="namePlaceholder" required>
+                            </div>
+                            <div class="form-group">
+                            <input type="email" name="reply_to" placeholder="E-posta Adresiniz" data-i18n="emailPlaceholder" required>
+                            </div>
+                            <div class="form-group">
+                            <textarea rows="4" name="message" placeholder="Mesajınız..." data-i18n="messagePlaceholder" required></textarea>
+                            </div>
+                            <button type="submit" class="submit-btn" data-i18n="sendBtn">Gönder</button>
+                        </form>
+                    </div>
+                </div>
+                
+                <div class="map-container">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3015.656209590513!2d29.32431441541019!3d40.90135897931327!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14cadad99388df69%3A0x6b63ea9e43673db!2sTeknopark%20%C4%B0stanbul!5e0!3m2!1str!2str" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="brand-footer-logo">
+                <svg class="brand-logo-icon" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="footerAtmosGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#93c5fd;stop-opacity:0.9" />
+                        </linearGradient>
+                    </defs>
+                    <path d="M 20 5 L 10 30 L 16 30 L 18 24 L 22 24 L 24 30 L 30 30 L 20 5" 
+                          fill="none" stroke="url(#footerAtmosGradient)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" opacity="1" />
+                    <line x1="16.5" y1="20" x2="23.5" y2="20" stroke="url(#footerAtmosGradient)" stroke-width="1.2" opacity="0.8" stroke-linecap="round" />
+                    <path d="M 8 16 Q 14 14 20 16" fill="none" stroke="url(#footerAtmosGradient)" stroke-width="0.9" opacity="0.6" stroke-linecap="round" />
+                    <path d="M 6 22 Q 12 20 18 22" fill="none" stroke="url(#footerAtmosGradient)" stroke-width="0.7" opacity="0.4" stroke-linecap="round" />
+                    <path d="M 32 16 Q 26 14 20 16" fill="none" stroke="url(#footerAtmosGradient)" stroke-width="0.9" opacity="0.6" stroke-linecap="round" />
+                    <path d="M 34 22 Q 28 20 22 22" fill="none" stroke="url(#footerAtmosGradient)" stroke-width="0.7" opacity="0.4" stroke-linecap="round" />
+                </svg>
+                <span class="brand-footer-text">ATMOS</span>
+            </div>
+            <div class="footer-links">
+                <a href="/hakkimizda" data-i18n="about">Hakkımızda</a>
+                <a href="/iletisim" data-i18n="contact">İletişim</a>
+                <a href="#" data-i18n="terms">Kullanım Koşulları</a>
+                <a href="#" data-i18n="privacy">Gizlilik Politikası</a>
+            </div>
+            <div class="footer-social">
+                <a href="#"><i class="fa-brands fa-twitter"></i></a>
+                <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                <a href="#"><i class="fa-brands fa-linkedin"></i></a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2026 ATMOS. <span data-i18n="allRights">Tüm hakları saklıdır.</span>
+            <span style="font-size: 0.85rem; opacity: 0.7; margin-top: 10px; display: block;" data-i18n="providedBy">Veriler <strong>OpenWeatherMap</strong> tarafından sağlanmaktadır.</span>
+        </div>
+    </footer>
+
+    <!-- Hamburger Menü Yan Panel (Side Drawer) -->
+    <div class="drawer-overlay" id="drawerOverlay"></div>
+    <div class="side-drawer" id="sideDrawer">
+        <div class="drawer-header">
+            <div class="drawer-title"><i class="fa-solid fa-gear"></i> <span data-i18n="settings">AYARLAR</span></div>
+            <button id="closeDrawerBtn" class="close-btn"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="drawer-content">
+            <div class="drawer-group">
+                <div class="drawer-group-title" data-i18n="pref">TERCİHLER</div>
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <label data-i18n="lang" style="font-weight:600;">Dil</label>
+                    <select id="langSelect" style="padding:5px 10px; border-radius:8px; border:1px solid var(--border-color); background:var(--bg-body); color:var(--text-main); outline:none; cursor:pointer;">
+                        <option value="tr">Türkçe</option>
+                        <option value="en">English</option>
+                    </select>
+                </div>
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <label data-i18n="unitSys" style="font-weight:600;">Birim</label>
+                    <select id="unitSelect" style="padding:5px 10px; border-radius:8px; border:1px solid var(--border-color); background:var(--bg-body); color:var(--text-main); outline:none; cursor:pointer;">
+                        <option value="metric">Metrik (°C, km/h)</option>
+                        <option value="imperial">Imperial (°F, mph)</option>
+                    </select>
+                </div>
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <label data-i18n="mapLayer" style="font-weight:600;">Harita</label>
+                    <select id="mapSelect" style="padding:5px 10px; border-radius:8px; border:1px solid var(--border-color); background:var(--bg-body); color:var(--text-main); outline:none; cursor:pointer;">
+                        <option value="street" data-i18n="mapStreet">Sokak (OSM)</option>
+                        <option value="satellite" data-i18n="mapSat">Uydu (Esri)</option>
+                        <option value="dark" data-i18n="mapDark">Karanlık (Carto)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="drawer-group">
+                <div class="drawer-group-title" data-i18n="navigation">MENÜ</div>
+                <a href="javascript:void(0)" onclick="window.activateTab('weatherResult'); window.toggleDrawer();"><i class="fa-solid fa-cloud-sun"></i> <span data-i18n="today">Bugün</span></a>
+                <a href="javascript:void(0)" onclick="window.activateTab('aboutSection'); window.toggleDrawer();"><i class="fa-solid fa-circle-info"></i> <span data-i18n="about">Hakkımızda</span></a>
+                <a href="javascript:void(0)" onclick="window.activateTab('contactSection'); window.toggleDrawer();"><i class="fa-solid fa-envelope"></i> <span data-i18n="contact">İletişim</span></a>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script type="text/javascript">
+        (function() {
+            emailjs.init("hsjL7p6dHPF5X5SfU");
+        })();
+    </script>
+    <script src="script.js"></script>
+</body>
+</html>

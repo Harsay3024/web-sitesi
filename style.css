@@ -1,0 +1,1667 @@
+:root {
+    --bg-body: #f4f6f8;
+    --bg-card: #fff;
+    --bg-card-hover: #f9fafb;
+    --text-main: #333;
+    --text-muted: #6b7280;
+    --border-color: #eee;
+    --bg-suggestion: #eff6ff;
+    --border-suggestion: #bfdbfe;
+    --text-suggestion: #1e3a8a;
+    --contact-text: #2d3436; /* İletişim sayfası metinleri için varsayılan */
+}
+
+/* --- Karanlık Mod (Dark Mode) Renkleri --- */
+[data-theme="dark"] {
+    --bg-body: #111827;
+    --bg-card: #1f2937;
+    --bg-card-hover: #374151;
+    --text-main: #f9fafb;
+    --text-muted: #9ca3af;
+    --border-color: #374151;
+    --bg-suggestion: rgba(59, 130, 246, 0.15);
+    --border-suggestion: rgba(59, 130, 246, 0.3);
+    --text-suggestion: #93c5fd;
+    --contact-text: #ffffff; /* İletişim sayfası metinleri için karanlık mod */
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+html {
+    scroll-behavior: smooth; /* Menü linklerine tıklanınca yumuşakça kayar */
+}
+
+body {
+    background-color: var(--bg-body);
+    background-image: radial-gradient(var(--border-color) 1.5px, transparent 1.5px);
+    background-size: 25px 25px; /* Doku aralığı */
+    color: var(--text-main);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Taşmayı önlemek için height: 100vh yerine min-height */
+}
+
+/* --- Yeni AccuWeather Tarzı Header --- */
+.main-header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.top-bar {
+    background: linear-gradient(135deg, #1e3a8a, #3b82f6); /* Varsayılan */
+    color: #fff;
+    padding: 12px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background 0.8s ease;
+}
+
+.top-bar-left, .top-bar-right {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+
+.logo { font-size: 1.5rem; font-weight: 800; letter-spacing: 2px; display: flex; align-items: center; gap: 10px; color: #ffffff; }
+
+/* --- ATMOS Premium Logo Tasarımı --- */
+.atmos-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+.atmos-brand:hover {
+    transform: scale(1.05);
+}
+
+.atmos-icon {
+    height: 35px;
+    width: 35px;
+    filter: drop-shadow(0 4px 8px rgba(59, 130, 246, 0.3)) 
+            drop-shadow(0 0 12px rgba(147, 197, 253, 0.2));
+    transition: filter 0.3s ease;
+}
+.atmos-brand:hover .atmos-icon {
+    filter: drop-shadow(0 6px 12px rgba(59, 130, 246, 0.4)) 
+            drop-shadow(0 0 16px rgba(147, 197, 253, 0.3));
+}
+
+.atmos-text {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    color: #ffffff;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+/* --- Footer'da Brand Logo --- */
+.brand-footer-logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+.brand-footer-logo:hover {
+    transform: translateY(-2px);
+}
+
+.brand-logo-icon {
+    height: 30px;
+    width: 30px;
+    filter: drop-shadow(0 2px 6px rgba(59, 130, 246, 0.4)) 
+            drop-shadow(0 0 10px rgba(147, 197, 253, 0.2));
+    transition: filter 0.3s ease;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+}
+.brand-footer-logo:hover .brand-logo-icon {
+    filter: drop-shadow(0 4px 10px rgba(59, 130, 246, 0.5)) 
+            drop-shadow(0 0 14px rgba(147, 197, 253, 0.3));
+}
+
+.brand-footer-text {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    color: #ffffff;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.header-weather-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.1);
+    padding: 5px 12px;
+    border-radius: 20px;
+    border: 1px solid rgba(255,255,255,0.2);
+}
+.header-city { font-weight: 600; }
+.header-temp { font-size: 1.1rem; }
+.header-icon { width: 30px; height: 30px; margin-left: -5px; }
+
+.header-search-box {
+    display: flex;
+    align-items: center;
+    background: rgba(255,255,255,0.15);
+    border-radius: 20px;
+    position: relative;
+}
+#headerCityInput {
+    background: transparent;
+    border: none;
+    color: white;
+    padding: 10px 15px;
+    outline: none;
+    width: 150px;
+    font-size: 1rem;
+    transition: width 0.3s ease;
+}
+#headerCityInput:focus {
+    width: 200px;
+    outline: none; /* Varsayılan tarayıcı çerçevesini sıfırlar */
+    box-shadow: 0 0 12px rgba(59, 130, 246, 0.4); /* Sitenin mavi tonunda şık odaklanma parlaması */
+    border-radius: 20px;
+}
+#headerCityInput::placeholder { color: rgba(255,255,255,0.7); }
+
+/* Tarayıcının otomatik eklediği datalist (ters üçgen) ikonunu gizle */
+#headerCityInput::-webkit-calendar-picker-indicator,
+#headerCityInput::-webkit-list-button {
+    display: none !important;
+}
+
+/* --- Otomatik Tamamlama (Autocomplete) --- */
+.autocomplete-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--bg-card);
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    margin-top: 10px;
+    overflow: hidden;
+    z-index: 2000;
+    display: flex;
+    flex-direction: column;
+}
+.autocomplete-dropdown.hidden {
+    display: none;
+}
+.autocomplete-item {
+    padding: 12px 15px;
+    cursor: pointer;
+    color: var(--text-main);
+    font-size: 0.95rem;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: background 0.2s;
+}
+.autocomplete-item:last-child { border-bottom: none; }
+.autocomplete-item:hover { background: var(--bg-card-hover); color: #3b82f6; }
+.autocomplete-item i { color: #9ca3af; }
+.autocomplete-item:hover i { color: #3b82f6; }
+.autocomplete-active { background: var(--bg-card-hover); color: #3b82f6; }
+.autocomplete-active i { color: #3b82f6; }
+
+#headerSearchBtn, #locationBtn, #themeToggleBtn {
+    background: transparent;
+    color: #fff;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: transform 0.2s;
+}
+#headerSearchBtn:hover, #locationBtn:hover, #themeToggleBtn:hover {
+    transform: scale(1.1);
+}
+
+.hamburger-menu {
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.sub-nav {
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    padding: 0 20px;
+    overflow-x: auto;
+    white-space: nowrap;
+    scrollbar-width: none; /* Firefox */
+}
+.sub-nav::-webkit-scrollbar { display: none; } /* Chrome ve Safari */
+.sub-nav-link {
+    padding: 15px 5px;
+    text-decoration: none;
+    color: var(--text-muted);
+    font-weight: 600;
+    font-size: 0.95rem;
+    border-bottom: 4px solid transparent; /* Kalınlaştırmak için 4px yapıldı */
+    transition: color 0.3s, border-color 0.3s;
+}
+.sub-nav-link:hover {
+    color: var(--text-main);
+}
+.sub-nav-link.active {
+    color: #2563eb;
+    border-bottom-color: #2563eb; /* Mavi aktif çizgi */
+    font-weight: 800; /* Fontu daha belirginleştir */
+}
+
+.container {
+    width: 100%;
+    max-width: 1100px; /* Geniş profesyonel görünüm */
+    margin: 0 auto;
+    padding: 0 20px 40px;
+}
+
+/* --- Sekme (Tab) Geçiş Animasyonları --- */
+.tab-section {
+    display: none;
+    animation: fadeInTab 0.4s ease forwards;
+}
+.tab-section.active-tab {
+    display: block !important; /* Standart hidden sınıfını ezmek için */
+}
+
+@keyframes fadeInTab {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- Hamburger Menü (Side Drawer) --- */
+.drawer-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.5); z-index: 2000;
+    opacity: 0; visibility: hidden; transition: all 0.3s ease;
+}
+.drawer-overlay.show { opacity: 1; visibility: visible; }
+
+.side-drawer {
+    position: fixed; top: 0; right: -300px; width: 300px; height: 100%;
+    background: rgba(255, 255, 255, 0.4); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); /* Opaklık ve bulanıklık diğer glass kartlarla uyumlu hale getirildi */
+    z-index: 2001; box-shadow: -2px 0 15px rgba(0,0,0,0.2); border-left: 1px solid rgba(255, 255, 255, 0.3);
+    transition: right 0.3s ease; display: flex; flex-direction: column;
+}
+.side-drawer.open { right: 0; }
+[data-theme="dark"] .side-drawer { background: rgba(31, 41, 55, 0.4); border-left: 1px solid rgba(255, 255, 255, 0.1); }
+[data-theme="dark"] .drawer-group {
+    background: rgba(31, 41, 55, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.drawer-header {
+    padding: 20px 25px; display: flex; justify-content: space-between; align-items: center;
+    background: transparent; color: var(--text-main); font-size: 1.1rem; font-weight: 700; border-bottom: 1px solid var(--border-color);
+}
+.drawer-title { display: flex; align-items: center; gap: 10px; }
+.close-btn { background: transparent; border: none; color: #6b7280; font-size: 1.5rem; cursor: pointer; transition: transform 0.2s; }
+.close-btn:hover { transform: scale(1.1); }
+
+.drawer-content { padding: 0; display: flex; flex-direction: column; }
+.drawer-group {
+    border-bottom: 1px solid var(--border-color); padding: 20px; display: flex; flex-direction: column; gap: 15px;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    margin: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+.drawer-group-title { font-size: 0.8rem; color: #9ca3af; font-weight: 700; letter-spacing: 1px; margin-bottom: 5px; }
+.drawer-group a { text-decoration: none; color: var(--text-main); font-size: 1.05rem; font-weight: 600; display: flex; align-items: center; gap: 15px; transition: color 0.2s; }
+.drawer-group a:hover { color: #3b82f6; }
+.drawer-group i { width: 25px; text-align: center; color: #3b82f6; font-size: 1.2rem; }
+
+.hidden {
+    display: none;
+}
+
+.weather-result {
+    margin-top: 20px;
+    animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- Yeni AccuWeather Tarzı Current Weather --- */
+.current-weather-banner {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+    margin-bottom: 30px;
+}
+
+.current-info {
+    text-align: left;
+}
+
+.city-name {
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--text-main);
+    margin-bottom: 10px;
+}
+
+.weather-desc {
+    font-size: 1.5rem;
+    text-transform: capitalize;
+    color: var(--text-muted);
+}
+
+.share-btn {
+    background: rgba(59, 130, 246, 0.1);
+    color: #3b82f6;
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 15px;
+    transition: all 0.3s ease;
+}
+.share-btn:hover {
+    background: #3b82f6;
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
+}
+[data-theme="dark"] .share-btn { background: rgba(96, 165, 250, 0.15); color: #60a5fa; border-color: rgba(96, 165, 250, 0.3); }
+[data-theme="dark"] .share-btn:hover { background: #3b82f6; color: #fff; }
+
+.current-temp-block {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.weather-icon {
+    width: 150px;
+    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
+}
+
+.temp {
+    font-size: 6rem;
+    font-weight: 300;
+    color: var(--text-main);
+    margin: 0;
+}
+
+.weather-details {
+    display: grid; /* Grid yapısı korunur */
+    grid-template-columns: repeat(5, 1fr);
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.detail-card { /* Glassmorphism özellikleri .glass-card-base'den alınır, border-radius biraz farklı */
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(12px); /* Tutarlılık için 12px */
+    -webkit-backdrop-filter: blur(12px);
+    padding: 20px 15px;
+    border-radius: 12px; /* Daha küçük kartlar için biraz daha az yuvarlak */
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+/* Dark mode için .glass-card-base'den alınır */
+[data-theme="dark"] .detail-card {
+    background: rgba(31, 41, 55, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.detail-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    border-color: #bfdbfe; /* Hafif pastel mavi */
+}
+
+.detail-title {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+
+.detail-value {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+.suggestion-card {
+    background: var(--bg-suggestion);
+    padding: 25px;
+    border-radius: 12px;
+    border: 1px solid var(--border-suggestion);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    color: var(--text-suggestion);
+    margin-bottom: 40px;
+}
+
+.suggestion-icon { font-size: 2rem; }
+.suggestion-text { font-size: 1.15rem; line-height: 1.5; }
+
+/* --- Saatlik Tahmin Tasarımı --- */
+.forecast-result {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+    text-align: left; /* Diğer ana içerik kutularıyla tutarlı boşluk */
+    margin-top: 30px;
+}
+
+.forecast-result h3 {
+    font-size: 1.5rem;
+    color: var(--text-main);
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.forecast-container {
+    display: flex;
+    overflow-x: auto;
+    gap: 20px;
+    padding-bottom: 15px;
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 transparent;
+}
+
+.forecast-container::-webkit-scrollbar {
+    height: 8px;
+}
+
+.forecast-container::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 10px;
+}
+
+.forecast-card {
+    background: rgba(255, 255, 255, 0.3); /* Biraz daha şeffaf */
+    backdrop-filter: blur(8px); /* Biraz daha az bulanık */
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+    border-radius: 12px;
+    padding: 20px;
+    min-width: 120px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+}
+[data-theme="dark"] .forecast-card {
+    background: rgba(31, 41, 55, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.forecast-time { font-size: 1rem; color: var(--text-muted); font-weight: 500; }
+.forecast-icon { width: 60px; }
+.forecast-temp { font-size: 1.4rem; font-weight: 700; color: var(--text-main); }
+
+/* --- Grafik (Chart.js) Alanı --- */
+.chart-container { /* Glassmorphism özellikleri .glass-card-base'den alınır */
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+    padding: 30px;
+    margin-top: 30px;
+    overflow: hidden;
+}
+[data-theme="dark"] .chart-container {
+    background: rgba(31, 41, 55, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.chart-container h3 {
+    font-size: 1.5rem;
+    color: var(--text-main);
+    margin-bottom: 10px;
+}
+
+/* --- 5 Günlük İki Sütunlu Düzen --- */
+.forecast-split-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+    align-items: start;
+    margin-top: 20px;
+}
+.forecast-right-col {
+    display: flex;
+    flex-direction: column;
+    position: sticky;
+    top: 90px; /* Liste uzun olsa da sağdaki grafik aşağı kayarken ekranda sabit kalır */
+}
+.chart-wrapper {
+    background: rgba(255, 255, 255, 0.3); /* Biraz daha şeffaf */
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+    border-radius: 16px;
+    padding: 20px;
+    height: 420px; /* Sonsuz uzamayı engelleyen kesin sabit yükseklik */
+    max-height: 420px;
+    display: flex;
+    flex-direction: column;
+}
+[data-theme="dark"] .chart-wrapper {
+    background: rgba(31, 41, 55, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+.chart-wrapper h4 { font-size: 0.95rem; color: var(--text-main); margin-bottom: 10px; text-align: center; font-weight: 600; }
+.chart-wrapper canvas { width: 100% !important; height: 100% !important; flex-grow: 1; min-height: 0; /* Flex-bug taşmasını çözer */ }
+
+/* --- Günlük Liste (AccuWeather Tarzı) --- */
+.daily-forecast-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+.daily-weather-card { /* Glassmorphism özellikleri .glass-card-base'den alınır */
+    background: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 15px;
+    transition: all 0.3s ease;
+}
+[data-theme="dark"] .daily-weather-card {
+    background: rgba(31, 41, 55, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.daily-weather-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+        background: var(--bg-card);
+    border-color: #bfdbfe; /* Hafif pastel mavi */
+}
+.daily-left { display: flex; align-items: center; gap: 20px; width: 25%; }
+.daily-date-block { text-align: center; min-width: 60px; }
+.daily-day { font-size: 1.2rem; font-weight: 700; color: var(--text-main); }
+.daily-icon { width: 45px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1)); } /* İkon küçültüldü */
+
+.daily-center { width: 35%; text-align: left; }
+.daily-temp { font-size: 1.4rem; font-weight: 800; letter-spacing: -1px; margin-bottom: 2px; }
+.temp-high { color: var(--text-main); }
+.temp-low { color: var(--text-muted); font-size: 1.1rem; font-weight: 600; }
+.daily-desc { font-size: 0.85rem; color: var(--text-muted); text-transform: capitalize; font-weight: 500; }
+
+.daily-right {
+    width: 40%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    font-size: 0.8rem; /* Genel font boyutu biraz küçültüldü, script.js'ten taşındı */
+    color: var(--text-muted);
+}
+.daily-detail-item {
+    white-space: nowrap; /* Metinlerin alt satıra geçmesini engelle */
+    overflow: hidden; /* Taşmayı gizle */
+    text-overflow: ellipsis; /* Taşma durumunda üç nokta göster */
+    display: flex; /* İçerikleri yan yana hizala */
+    align-items: center; /* Dikeyde ortala */
+}
+.daily-detail-item i { color: #3b82f6; width: 20px; text-align: center; margin-right: 5px; flex-shrink: 0; }
+.daily-detail-item span { /* Detay etiketleri için (örn: Hiss., Rüzgar) */
+    font-size: 0.75rem; /* Script.js'ten taşındı */
+    flex-shrink: 0; /* Küçülmesini engelle */
+}
+.daily-detail-item strong { color: var(--text-main); font-weight: 700; flex-shrink: 0; }
+
+/* --- 5 Günlük Tahmin Detay Paneli (Accordion) --- */
+.daily-weather-wrapper {
+    display: flex;
+    flex-direction: column;
+    background: var(--bg-card-hover);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+.daily-weather-wrapper:hover {
+    box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+    border-color: #bfdbfe;
+}
+.daily-weather-wrapper .daily-weather-card {
+    border: none;
+    border-radius: 0;
+    background: transparent;
+    cursor: pointer;
+    margin-bottom: 0; /* Bu kartın kendi glassmorphism'i wrapper'dan gelir */
+}
+.daily-weather-wrapper .daily-weather-card:hover {
+    transform: none;
+    box-shadow: none;
+        background: var(--bg-card);
+}
+.daily-details-panel {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease-in-out;
+    background: var(--bg-card); /* İç panelin arka planı */
+    border-top: 1px solid transparent;
+}
+.daily-details-panel.expanded {
+    max-height: 300px;
+        border-top: 1px solid var(--border-color);
+}
+.hourly-details-scroll {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    padding: 20px;
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 transparent;
+}
+.hourly-details-scroll::-webkit-scrollbar { height: 6px; }
+.hourly-details-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+.hourly-detail-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 60px;
+    gap: 3px;
+    font-size: 0.85rem;
+}
+.hourly-detail-card .h-time { font-weight: 600; color: var(--text-muted); }
+.hourly-detail-card .h-icon { width: 30px; margin: -2px 0; }
+.hourly-detail-card .h-temp { font-size: 1rem; font-weight: 700; color: var(--text-main); }
+.hourly-detail-card .h-wind { display: flex; align-items: center; gap: 3px; color: var(--text-muted); font-size: 0.75rem; }
+.hourly-detail-card .h-wind i { color: #3b82f6; font-size: 0.8rem; }
+.hourly-detail-card .h-pop { display: flex; flex-direction: column; align-items: center; gap: 3px; color: var(--text-muted); font-weight: 500; font-size: 0.7rem; margin-top: 3px; }
+.pop-bar-bg { width: 8px; height: 35px; background: #eff6ff; border-radius: 4px; position: relative; overflow: hidden; margin-bottom: 2px;}
+.pop-bar-fill { position: absolute; bottom: 0; left: 0; width: 100%; background: #3b82f6; border-radius: 4px; }
+
+/* --- Hava Kalitesi (AQI) Alanı --- */
+.aqi-section {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+    margin-top: 30px;
+    text-align: left;
+}
+.aqi-section h3 {
+    font-size: 1.5rem;
+    color: var(--text-main);
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--border-color);
+}
+.aqi-gauge-card {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+.aqi-gauge-circle {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+.aqi-gauge-inner {
+    width: 140px;
+    height: 140px;
+    background: var(--bg-card);
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: inset 0 2px 10px rgba(0,0,0,0.05);
+}
+.aqi-score { font-size: 3.5rem; font-weight: 800; line-height: 1; }
+.aqi-label { font-size: 1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-top: 5px; }
+
+.pollutant-title { font-size: 1.2rem; color: var(--text-main); margin-bottom: 15px; font-weight: 700; }
+.pollutants-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+}
+.pollutant-card {
+    background: rgba(255, 255, 255, 0.3); /* Biraz daha şeffaf */
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+    border-radius: 12px;
+    padding: 20px;
+    transition: all 0.3s ease;
+}
+[data-theme="dark"] .pollutant-card {
+    background: rgba(31, 41, 55, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+.pollutant-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+        background: var(--bg-card);
+    border-color: #bfdbfe;
+}
+.pollutant-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.pollutant-name { font-size: 1.1rem; font-weight: 700; color: var(--text-main); }
+.pollutant-value { font-size: 1.3rem; font-weight: 800; color: #3b82f6; }
+.pollutant-desc { font-size: 0.9rem; color: var(--text-muted); line-height: 1.4; }
+
+/* --- Footer --- */
+.site-footer { /* Footer için özel glassmorphism, biraz daha opak */
+    background: rgba(31, 41, 55, 0.6);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
+    color: #ffffff; /* Tüm footer metinleri beyaz yapıldı */
+    padding: 60px 20px 20px;
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+[data-theme="dark"] .site-footer {
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    color: #ffffff; /* Karanlık modda da beyaz */
+}
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 30px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* Glassmorphism kenarlık */
+    padding-bottom: 40px;
+    text-align: center;
+}
+.footer-logo { font-size: 1.5rem; font-weight: 700; color: #ffffff; } /* Logo metni beyaz */
+.footer-links { display: flex; gap: 20px; }
+.footer-links a { color: #ffffff; text-decoration: none; transition: color 0.3s; } /* Linkler beyaz */
+.footer-links a:hover { color: #3b82f6; } /* Hover'da ana mavi tonu */
+.footer-social { display: flex; gap: 15px; font-size: 1.2rem; }
+.footer-social a { color: #ffffff; transition: color 0.3s; } /* Sosyal medya ikonları beyaz */
+.footer-social a:hover { color: #3b82f6; } /* Hover'da ana mavi tonu */
+.footer-bottom { text-align: center; padding-top: 20px; font-size: 0.9rem; color: #ffffff; margin-bottom: 20px; } /* Telif hakkı metni beyaz */
+
+/* --- Toast Bildirim Sistemi (Hava Durumu Uyarıları İçin) --- */
+#toast-container {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    z-index: 9999;
+}
+
+.weather-toast { /* Glassmorphism toast */
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.6)); /* Daha şık gradyan */
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    color: var(--text-main);
+    border-left: 5px solid #3b82f6; /* Başarılı/Bilgi için mavi */
+    padding: 20px 30px;
+    border-radius: 15px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.2), 0 0 20px rgba(59, 130, 246, 0.1); /* Daha derin gölge ve mavi parıltı */
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    animation: slideInToast 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    position: relative;
+    overflow: hidden;
+}
+.weather-toast::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #3b82f6, #60a5fa, #93c5fd);
+    animation: shimmer 2s infinite;
+}
+@keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+[data-theme="dark"] .weather-toast {
+    background: linear-gradient(135deg, rgba(31, 41, 55, 0.8), rgba(31, 41, 55, 0.6));
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-left-color: #60a5fa; /* Karanlık modda daha açık mavi */
+    box-shadow: 0 15px 40px rgba(0,0,0,0.4), 0 0 20px rgba(96, 165, 250, 0.1);
+}
+.weather-toast i { color: #3b82f6; } /* Varsayılan ikon rengi */
+.weather-toast.hide { animation: fadeOutToast 0.4s ease forwards; }
+
+@keyframes slideInToast {
+    from { transform: translateX(120%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+@keyframes fadeOutToast {
+    from { transform: translateX(0); opacity: 1; }
+    to { transform: translateX(120%); opacity: 0; }
+}
+
+@media (max-width: 650px) {
+    #toast-container { bottom: 20px; right: 20px; left: 20px; }
+    .weather-toast { font-size: 1rem; padding: 18px 20px; border-radius: 12px; gap: 15px; }
+}
+
+/* --- Açık Hava Aktiviteleri Paneli --- */
+.activity-panel {
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+    margin-bottom: 30px;
+    text-align: left;
+}
+[data-theme="dark"] .activity-panel {
+    background: rgba(31, 41, 55, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.activity-panel h3 {
+    font-size: 1.5rem;
+    color: var(--text-main);
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--border-color);
+}
+.activity-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+}
+.activity-card {
+    background: var(--bg-card-hover);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 20px;
+    transition: all 0.3s ease;
+}
+.activity-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    border-color: #bfdbfe;
+        background: var(--bg-card);
+}
+.activity-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    font-weight: 600;
+        color: var(--text-main);
+    font-size: 1.05rem;
+}
+.activity-header i { font-size: 1.4rem; color: #3b82f6; }
+.activity-score { font-size: 1.1rem; font-weight: 800; }
+.progress-bar { width: 100%; height: 8px; background: #e5e7eb; border-radius: 4px; overflow: hidden; }
+.progress-fill { height: 100%; border-radius: 4px; transition: width 1s ease-in-out; }
+
+.leaflet-map-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+    height: 500px;
+        background: var(--bg-card-hover);
+    border-radius: 16px;
+        border: 1px solid var(--border-color);
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    z-index: 1; /* Dropdown ve header arkasında kalması için */
+}
+#weatherMap {
+    width: 100%;
+    height: 100%;
+}
+
+/* Leaflet z-index düzeltmesi (Sitenin header'ının üstüne çıkmasını engeller) */
+.leaflet-pane { z-index: 10; }
+.leaflet-top, .leaflet-bottom { z-index: 10; }
+
+/* --- Harita Katman Kontrolü (Layer Control) --- */
+.leaflet-control-layers {
+    border: none !important;
+    border-radius: 12px !important;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1) !important;
+    background: var(--bg-card) !important;
+    color: var(--text-main) !important;
+    padding: 8px !important;
+    font-family: inherit !important;
+}
+.leaflet-control-layers-list label {
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 5px;
+    cursor: pointer;
+}
+[data-theme="dark"] .leaflet-control-layers {
+    background: var(--bg-card-hover) !important;
+    color: var(--text-main) !important;
+    border: 1px solid var(--border-color) !important;
+}
+
+/* --- Harita Tooltip (Baloncuk) Metin Renkleri --- */
+.leaflet-tooltip { color: #333 !important; }
+.popup-temp { color: #111827 !important; font-weight: 700; }
+
+/* --- Harita Lejantı (Renk Anahtarı) --- */
+.map-legend {
+    background: var(--bg-card) !important;
+    padding: 12px 15px !important;
+    border-radius: 12px !important;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1) !important;
+    color: var(--text-main) !important;
+    border: 1px solid var(--border-color) !important;
+    min-width: 160px;
+}
+.legend-section { margin-bottom: 12px; }
+.legend-section:last-child { margin-bottom: 0; }
+.legend-section.hidden { display: none; }
+.legend-title { font-weight: 700; margin-bottom: 6px; font-size: 0.8rem; }
+.legend-bar { height: 8px; border-radius: 4px; width: 100%; margin-bottom: 5px; }
+.temp-bar { background: linear-gradient(to right, #821692, #0010d5, #00ff00, #fffe00, #ff0000, #c80000); }
+.rain-bar { background: linear-gradient(to right, rgba(200,200,200,0.2), #00ffff, #0000ff, #ff00ff); }
+.cloud-bar { background: linear-gradient(to right, rgba(255,255,255,0), #d4d4d8, #9ca3af, #4b5563); }
+.legend-labels { display: flex; justify-content: space-between; color: var(--text-muted); font-size: 0.75rem; font-weight: 600; }
+
+[data-theme="dark"] .map-legend { background: var(--bg-card-hover) !important; }
+/* Karanlık mod harita filtresiyle birebir aynı renkleri yansıtması için lejant barlarına da aynı filtre uygulanır */
+[data-theme="dark"] .legend-bar { filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%); }
+
+/* Karanlık Mod Aktifken Harita Renklerini Tersine Çevir (Gece Modu Haritası) */
+[data-theme="dark"] .leaflet-layer {
+    filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);
+}
+
+/* --- Hakkımızda & İletişim Bölümleri --- */
+.info-section {
+    padding: 60px 20px;
+    text-align: center;
+}
+
+.info-section:nth-child(even) {
+    background-color: transparent; /* Düz beyaz arka plan kaldırıldı */
+}
+
+.info-container {
+    background: rgba(255, 255, 255, 0.4); /* Glassmorphism için yarı şeffaf */
+    backdrop-filter: blur(12px); /* Hafif bulanıklık */
+    -webkit-backdrop-filter: blur(12px);
+    max-width: 800px;
+    margin: 0 auto;
+    border: 1px solid rgba(255, 255, 255, 0.3); /* Hafif kenarlık */
+    border-radius: 16px;
+    padding: 40px; /* İçerik için boşluk */
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05); /* Hafif gölge */
+}
+[data-theme="dark"] .info-container {
+    background: rgba(31, 41, 55, 0.4); /* Karanlık modda lacivert tonlarında */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.info-container h2 {
+    font-size: 2rem; /* Başlık boyutu */
+    color: var(--text-main); /* Dinamik metin rengi */
+    margin-bottom: 20px;
+}
+
+.info-container p {
+    font-size: 1.1rem;
+    color: var(--text-muted); /* Dinamik metin rengi */
+    line-height: 1.6;
+}
+
+/* --- Alt Sayfalar: Ortak Başlık ve Ayırıcı Çizgi --- */
+.page-title {
+    position: relative;
+    padding-bottom: 15px;
+    margin-bottom: 25px;
+    color: var(--text-main); /* Başlık rengi dinamikleştirildi */
+}
+.page-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 4px;
+    background: #3b82f6;
+    border-radius: 4px;
+}
+.sub-heading {
+    font-size: 1.5rem;
+    color: var(--text-main); /* Alt başlık rengi dinamikleştirildi */
+    margin: 40px 0 20px;
+}
+
+/* Hakkımızda Sayfası İçin Yeni Aşama Kartları */
+.about-intro-text {
+    margin-bottom: 30px; /* Giriş metni altına boşluk */
+}
+.about-stages-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-top: 30px;
+    margin-bottom: 40px;
+}
+
+.about-stage-card {
+    background: rgba(255, 255, 255, 0.3); /* Glassmorphism için yarı şeffaf */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    padding: 25px;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.04);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+[data-theme="dark"] .about-stage-card {
+    background: rgba(31, 41, 55, 0.3); /* Karanlık modda lacivert tonlarında */
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.about-stage-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+}
+
+.about-stage-icon {
+    font-size: 3rem;
+    color: #3498db; /* Canlı mavi ikon rengi */
+    margin-bottom: 15px;
+}
+
+.about-stage-card h4 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--text-main); /* Dinamik metin rengi */
+    margin-bottom: 10px;
+}
+
+.about-stage-card p {
+    font-size: 1rem;
+    color: var(--text-muted); /* Dinamik metin rengi */
+    line-height: 1.6;
+}
+
+/* --- Hakkımızda: Özellikler Grid ve Kartlar --- */
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+    margin-bottom: 40px;
+}
+.feature-card {
+    background: rgba(255, 255, 255, 0.4); /* Glassmorphism için yarı şeffaf */
+    backdrop-filter: blur(8px); /* Hafif bulanıklık */
+    -webkit-backdrop-filter: blur(8px);
+    padding: 20px 15px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.3); /* Hafif kenarlık */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); /* Hafif gölge */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+[data-theme="dark"] .feature-card {
+    background: rgba(31, 41, 55, 0.4); /* Karanlık modda lacivert tonlarında */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.feature-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    border-color: #bfdbfe;
+}
+.feature-icon {
+    font-size: 2.5rem;
+    color: #3b82f6;
+    margin-bottom: 15px;
+}
+.feature-card h4 {
+    font-size: 1.2rem;
+    color: var(--text-main); /* Dinamik metin rengi */
+    margin-bottom: 10px;
+    font-weight: 700;
+}
+.feature-card p {
+    font-size: 0.95rem;
+    color: var(--text-muted); /* Dinamik metin rengi */
+    line-height: 1.5;
+}
+
+/* --- İletişim: İki Sütunlu Yapı ve Form --- */
+.contact-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    text-align: left;
+    margin-top: 30px;
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 16px;
+    padding: 40px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+}
+[data-theme="dark"] .contact-wrapper {
+    background: rgba(31, 41, 55, 0.4); /* Karanlık modda lacivert tonlarında */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.contact-info p {
+    color: var(--contact-text);
+}
+.contact-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+    font-size: 1.1rem;
+        color: var(--contact-text);
+}
+.contact-item i {
+    color: #3498db; /* İletişim ikonları her iki modda da canlı mavi */
+    font-size: 1.4rem;
+    width: 25px;
+    text-align: center;
+}
+.contact-form-container {
+        background: transparent;
+    padding: 0;
+    border: none;
+}
+.form-group {
+    margin-bottom: 20px;
+}
+.contact-form input,
+.contact-form textarea {
+    width: 100%;
+    padding: 15px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    font-size: 1rem;
+    background: #ffffff; /* Aydınlık modda temiz beyaz */
+    color: var(--contact-text); /* Dinamik metin rengi */
+    transition: border-color 0.3s;
+}
+[data-theme="dark"] .contact-form input,
+[data-theme="dark"] .contact-form textarea {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: var(--contact-text);
+}
+.contact-form input:focus,
+.contact-form textarea:focus {
+    border-color: #3b82f6;
+    outline: none;
+}
+.submit-btn {
+    width: 100%;
+    padding: 15px 30px;
+    background-color: #2563eb; /* Gönder butonu rengi */
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+.submit-btn:hover {
+    background-color: #1d4ed8;
+    transform: scale(1.03);
+    box-shadow: 0 0 15px rgba(37, 99, 235, 0.6); /* Hafif parlama efekti */
+}
+.submit-btn:active { transform: scale(0.95); }
+
+/* --- Yüklenme Animasyonu için Buton Stili --- */
+.submit-btn.loading {
+    position: relative;
+    pointer-events: none; /* Tıklamayı engelle */
+    color: transparent !important; /* Metni gizle */
+}
+
+.submit-btn.loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin-top: -10px;
+    margin-left: -10px;
+    border: 3px solid rgba(255, 255, 255, 0.5);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+/* --- Harita Alanı --- */
+.map-container {
+    margin-top: 40px;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        border: 1px solid var(--border-color);
+    height: 350px;
+}
+.map-container iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+/* --- Mobil Uyumluluk --- */
+@media (max-width: 900px) {
+    .forecast-split-layout {
+        grid-template-columns: 1fr; /* Mobilde alt alta geçer */
+    }
+    .weather-details {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    .pollutants-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .activity-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 650px) {
+    .current-weather-banner {
+        flex-direction: column;
+        text-align: center;
+        padding: 30px 20px;
+    }
+    .current-info {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    .city-name {
+        font-size: 2.2rem;
+    }
+    .temp {
+        font-size: 4.5rem;
+    }
+    .weather-details {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px; /* Mobilde kart aralıklarını daraltarak taşmayı engelle */
+    }
+    .search-box { flex-direction: column; }
+    button, #locationBtn { width: 100%; }
+    .hero-container h1 { font-size: 1.8rem; }
+    .contact-wrapper {
+        grid-template-columns: 1fr; /* Mobilde formu alta atar */
+        gap: 30px;
+    }
+    .contact-info {
+        text-align: center;
+    }
+    .daily-weather-card {
+        flex-direction: column;
+        gap: 15px;
+        align-items: flex-start;
+    }
+    .daily-left, .daily-center, .daily-right { width: 100%; }
+    .daily-right { grid-template-columns: 1fr; gap: 8px; }
+    .pollutants-grid {
+        grid-template-columns: 1fr;
+    }
+    .activity-grid {
+        grid-template-columns: 1fr;
+    }
+    .about-stages-grid {
+        grid-template-columns: 1fr; /* Mobilde aşama kartları alt alta */
+    }
+    #toast-container { bottom: 20px; right: 20px; left: 20px; }
+    .weather-toast { font-size: 0.95rem; padding: 15px; }
+    .smart-advice-card { padding: 15px; font-size: 0.9rem; }
+}
+
+/* --- Dinamik İkon Animasyonları --- */
+@keyframes spin { 100% { transform: rotate(360deg); } }
+@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+@keyframes pulseLight { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.7; transform: scale(0.95); } }
+/* Dinamik rüzgar ikonu için */
+@keyframes dynamic-spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.anim-spin { animation: spin 15s linear infinite; } /* Güneş için ağır dönüş */
+.anim-float { animation: float 3s ease-in-out infinite; } /* Bulutlar için süzülme */
+.anim-pulse { animation: pulseLight 2s ease-in-out infinite; } /* Yağmur için hafif nabız efekti */
+/* --- Footer (Alt Bilgi) Glassmorphism --- */
+.site-footer {
+    background: rgba(31, 41, 55, 0.6); /* Glassmorphism için yarı şeffaf koyu */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(255, 255, 255, 0.1); /* Glassmorphism kenarlık */
+    color: var(--text-muted); /* Genel metin rengi */
+    padding: 60px 20px 20px;
+    margin-top: auto; /* Sayfanın her zaman en altında durmasını sağlar */
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1); /* Hafif yukarı gölge */
+}
+/* Dark mode için özel bir background gerekmez, zaten rgba ile uyumlu */
+[data-theme="dark"] .site-footer {
+    border-top: 1px solid rgba(255, 255, 255, 0.05); /* Daha ince kenarlık */
+}
+.footer-content {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 30px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* Glassmorphism kenarlık */
+    padding-bottom: 40px;
+}
+.footer-logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-main); /* Dinamik metin rengi */
+}
+.footer-links { display: flex; gap: 20px; }
+.footer-links a {
+    color: var(--text-muted); /* Dinamik metin rengi */
+    text-decoration: none;
+    transition: color 0.3s;
+}
+.footer-links a:hover { color: #3b82f6; }
+.footer-social { display: flex; gap: 15px; font-size: 1.2rem; }
+.footer-social a {
+    color: var(--text-muted); /* Dinamik metin rengi */
+    transition: color 0.3s;
+}
+.footer-social a:hover { color: var(--text-main); } /* Hover'da daha belirgin */
+.footer-bottom {
+    text-align: center;
+    padding-top: 20px;
+    font-size: 0.9rem;
+    color: var(--text-muted); /* Dinamik metin rengi */
+}
+/* Footer Yazılarını Zorla Parlat */
+footer, 
+footer a, 
+footer span, 
+footer p,
+.footer-links a {
+    color: rgba(255, 255, 255, 0.9) !important; /* Yazıları beyaz yap */
+    text-decoration: none !important;
+    transition: all 0.3s ease;
+}
+
+/* Üzerine gelince mavi olsun */
+footer a:hover {
+    color: #3b82f6 !important;
+}
+
+/* Sosyal medya ikonları için */
+footer .social-icons i, 
+footer .fab, 
+footer .fas {
+    color: white !important;
+    opacity: 0.8;
+}
+/* Telif hakkı ve sahipsiz tüm metinleri parlat */
+footer div, 
+footer p, 
+footer small, 
+footer .copyright {
+    color: #ffffff !important;
+    opacity: 1 !important;
+    display: inline-block; /* Bazen görünürlüğü etkiler */
+    font-size: 0.9rem;
+}
+
+/* --- Saatlik Tahmin Kartlarında Detaylar --- */
+.forecast-details {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 5px;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+.detail-item {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
+.detail-item i {
+    font-size: 0.9rem;
+    color: #3b82f6;
+}
+
+/* --- Akıllı Tavsiye Kartı --- */
+.smart-advice-card {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(96, 165, 250, 0.05));
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    border-radius: 12px;
+    padding: 20px;
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.1);
+    transition: all 0.3s ease;
+}
+.smart-advice-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.15);
+}
+.advice-icon {
+    font-size: 1.5rem;
+    color: #3b82f6;
+    background: rgba(59, 130, 246, 0.1);
+    padding: 10px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.advice-text {
+    font-size: 1rem;
+    color: var(--text-main);
+    line-height: 1.5;
+    font-weight: 500;
+}
+[data-theme="dark"] .smart-advice-card {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(96, 165, 250, 0.05));
+    border: 1px solid rgba(96, 165, 250, 0.2);
+}
+
+/* --- Astronomi Kartı: Güneş ve Ay Döngüsü --- */
+.astronomy-container {
+    margin-top: 25px;
+    display: flex;
+    justify-content: center;
+}
+
+.astronomy-card {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.08), rgba(139, 92, 246, 0.08));
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(139, 92, 246, 0.2);
+    border-radius: 14px;
+    padding: 25px;
+    width: 100%;
+    max-width: 600px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+.astronomy-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(59, 130, 246, 0.1);
+    border-color: rgba(139, 92, 246, 0.3);
+}
+
+.astronomy-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-align: center;
+    margin-bottom: 20px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.astronomy-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.astronomy-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+}
+
+.astronomy-timeblock {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.astronomy-label {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.astronomy-time {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #ffffff;
+    letter-spacing: 0.5px;
+}
+
+.astronomy-divider {
+    width: 1px;
+    height: 50px;
+    background: linear-gradient(180deg, transparent, rgba(139, 92, 246, 0.3), transparent);
+    margin: 0 15px;
+}
+
+.sunrise-item {
+    justify-content: flex-start;
+}
+
+.sunset-item {
+    justify-content: flex-end;
+    flex-direction: row-reverse;
+}
+
+/* Dark Mode Uyumluluğu */
+[data-theme="dark"] .astronomy-card {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.08), rgba(139, 92, 246, 0.08));
+    border-color: rgba(139, 92, 246, 0.15);
+}
+
+/* Mobil Görünüm */
+@media (max-width: 650px) {
+    .astronomy-card {
+        padding: 18px;
+    }
+    
+    .astronomy-content {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .astronomy-divider {
+        width: 100%;
+        height: 1px;
+        margin: 10px 0;
+    }
+    
+    .sunrise-item,
+    .sunset-item {
+        justify-content: center;
+        flex-direction: row;
+    }
+}
