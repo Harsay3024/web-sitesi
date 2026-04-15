@@ -1713,3 +1713,48 @@ footer .copyright {
         flex-direction: row;
     }
 }
+
+/* --- Ekstra Mobil Duyarlılık (Responsive) Düzeltmeleri --- */
+@media (max-width: 768px) {
+    /* 1. Genel Kapsayıcılar ve Yatay Taşma Engelleme */
+    html, body {
+        overflow-x: hidden;
+        width: 100%;
+    }
+    .container, .info-container, .tab-section, .chart-container, .forecast-result, .weather-result {
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
+    /* 2. Alt Menü (Navigasyon) Düzeni */
+    /* Linklerin daralmasını engeller, yana doğru kaydırılabilir yatay menü yapar */
+    .sub-nav {
+        justify-content: flex-start;
+        padding: 0 15px;
+    }
+    .sub-nav-link {
+        padding: 12px 10px;
+        font-size: 0.9rem;
+    }
+
+    /* 3. Kartlar ve Hakkımızda/Özellikler Bölümleri (Alt Alta Dizilim) */
+    .features-grid, .about-stages-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+    .info-section {
+        padding: 30px 15px;
+    }
+
+    /* 4. Grafikler ve Saatlik Tahminler */
+    .chart-wrapper {
+        height: 300px; /* Ekrana sığması için yükseklik küçültüldü */
+        padding: 10px;
+    }
+    .forecast-split-layout {
+        display: flex;
+        flex-direction: column;
+    }
+}
