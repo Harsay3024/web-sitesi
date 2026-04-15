@@ -1716,22 +1716,24 @@ footer .copyright {
 
 /* --- Ekstra Mobil Duyarlılık (Responsive) Düzeltmeleri --- */
 @media (max-width: 768px) {
-    /* 1. Genel Kapsayıcılar ve Yatay Taşma Engelleme */
+    /* 1. Genel Kapsayıcılar ve Yatay Taşma Engelleme (Kesin Çözüm) */
     html, body {
-        overflow-x: hidden;
+        max-width: 100vw;
         width: 100%;
+        overflow-x: hidden !important;
     }
-    .container, .info-container, .tab-section, .chart-container, .forecast-result, .weather-result {
+    .container, .info-container, .tab-section, .chart-container, .forecast-result, .weather-result, .main-header, .site-footer, .top-bar {
         width: 100%;
         max-width: 100%;
         box-sizing: border-box;
     }
 
     /* 2. Alt Menü (Navigasyon) Düzeni */
-    /* Linklerin daralmasını engeller, yana doğru kaydırılabilir yatay menü yapar */
     .sub-nav {
-        justify-content: flex-start;
-        padding: 0 15px;
+        justify-content: center;
+        padding: 10px 15px;
+        flex-wrap: wrap; /* Linklerin taşıp sayfayı itmesini KESİN engeller */
+        gap: 10px;
     }
     .sub-nav-link {
         padding: 12px 10px;
@@ -1756,5 +1758,20 @@ footer .copyright {
     .forecast-split-layout {
         display: flex;
         flex-direction: column;
+    }
+
+    /* 5. Harita ve Arama Çubuğu Kesin Taşma Engelleme */
+    .leaflet-map-wrapper {
+        max-width: 100% !important;
+        overflow: hidden;
+        box-sizing: border-box;
+    }
+    .header-search-box {
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+    #headerCityInput {
+        max-width: 100%; /* Input'un ekranı itmesini engeller */
+        min-width: 0; /* Flexbox içinde taşmayı önlemek için şarttır */
     }
 }
