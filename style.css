@@ -1345,55 +1345,103 @@ body {
     }
 }
 
-@media (max-width: 650px) {
+@media (max-width: 768px) {
+    /* --- Header & Arama Çubuğu Düzeltmeleri --- */
+    .top-bar {
+        flex-direction: column;
+        gap: 15px;
+        padding: 15px;
+    }
+    .top-bar-left, .top-bar-right {
+        width: 100%;
+        justify-content: space-between;
+    }
+    .header-search-box {
+        flex: 1;
+        margin-right: 15px;
+        justify-content: space-between;
+    }
+    #headerCityInput {
+        width: 100%; /* Sabit px yerine kalan boşluğu doldur */
+    }
+    #headerCityInput:focus {
+        width: 100%; /* Mobilde input'un büyüyüp ekranı patlatmasını iptal et */
+    }
+
+    /* --- Ana İçerik ve Kart Düzeltmeleri --- */
+    .container {
+        padding: 0 15px 20px;
+    }
     .current-weather-banner {
         flex-direction: column;
         text-align: center;
-        padding: 30px 20px;
+        padding: 25px 15px;
     }
     .current-info {
         text-align: center;
         margin-bottom: 20px;
     }
+    .current-temp-block {
+        justify-content: center;
+    }
     .city-name {
         font-size: 2.2rem;
     }
     .temp {
-        font-size: 4.5rem;
+        font-size: 3.5rem;
+    }
+    .leaflet-map-wrapper {
+        height: 350px; /* Mobilde harita çok yer kaplamasın */
     }
     .weather-details {
         grid-template-columns: repeat(2, 1fr);
-        gap: 10px; /* Mobilde kart aralıklarını daraltarak taşmayı engelle */
+        gap: 12px;
     }
-    .search-box { flex-direction: column; }
-    button, #locationBtn { width: 100%; }
-    .hero-container h1 { font-size: 1.8rem; }
+    
+    /* --- Alt Sayfalar & Formlar --- */
     .contact-wrapper {
-        grid-template-columns: 1fr; /* Mobilde formu alta atar */
+        grid-template-columns: 1fr;
         gap: 30px;
+        padding: 25px 15px;
     }
     .contact-info {
         text-align: center;
     }
+    .info-container {
+        padding: 25px 15px;
+    }
     .daily-weather-card {
         flex-direction: column;
         gap: 15px;
-        align-items: flex-start;
+        align-items: center;
+        text-align: center;
     }
-    .daily-left, .daily-center, .daily-right { width: 100%; }
-    .daily-right { grid-template-columns: 1fr; gap: 8px; }
-    .pollutants-grid {
+    .daily-left, .daily-center, .daily-right { 
+        width: 100%; 
+        justify-content: center;
+    }
+    .daily-right { 
+        grid-template-columns: 1fr; 
+        gap: 10px; 
+    }
+    .pollutants-grid, .activity-grid, .about-stages-grid {
         grid-template-columns: 1fr;
     }
-    .activity-grid {
-        grid-template-columns: 1fr;
-    }
-    .about-stages-grid {
-        grid-template-columns: 1fr; /* Mobilde aşama kartları alt alta */
+    
+    /* --- Footer & Ekstra Bildirimler --- */
+    .footer-content {
+        flex-direction: column;
+        text-align: center;
+        gap: 20px;
     }
     #toast-container { bottom: 20px; right: 20px; left: 20px; }
     .weather-toast { font-size: 0.95rem; padding: 15px; }
-    .smart-advice-card { padding: 15px; font-size: 0.9rem; }
+    .smart-advice-card { 
+        padding: 15px; 
+        font-size: 0.9rem; 
+        flex-direction: column; 
+        text-align: center;
+    }
 }
 
 /* --- Dinamik İkon Animasyonları --- */
